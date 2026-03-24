@@ -2,8 +2,13 @@
 
 #include <glad/glad.h>
 
-
 #include <iostream>
+
+
+#include "OpenGLObjects/VAO.h"
+#include "OpenGLObjects/VBO.h"
+#include "OpenGLObjects/EBO.h"
+#include "OpenGLObjects/Shader.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -49,9 +54,15 @@ App::~App()
 void App::Run()
 {
 	float vertices[] = {
-		-0.5f, -0.5f, 0.0f,
-		0.5f, -0.5f, 0.0f,
-		0.0f, 0.5f, 0.0f
+		 0.5f,  0.5f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,  // top right
+		 0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 0.0f,  // bottom right
+		-0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 0.0f, 0.0f,  // bottom left
+		-0.5f,  0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f    // top left 
+	};
+
+	unsigned int indices[] = {  
+		0, 1, 3,   
+		1, 2, 3   
 	};
 
 	Shader defaultShader("Shaders/simple.vert", "Shaders/simple.frag");
@@ -62,9 +73,15 @@ void App::Run()
 	VBO TriangleVBO;
 	TriangleVBO.Bind();
 
-	TriangleVBO.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	EBO TriangleEBO;
+	TriangleEBO.Bind();
 
-	TriangleVAO.linkAttrib(0, 3, GL_FLOAT, 3 * sizeof(float), (void*)0);
+	TriangleVBO.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
+	TriangleEBO.SetData(indices, sizeof(indices), GL_STATIC_DRAW);
+
+	TriangleVAO.linkAttrib(0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
+	TriangleVAO.linkAttrib(1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+	TriangleVAO.linkAttrib(2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(5 * sizeof(float)));
 
 	TriangleVBO.Unbind();
 	TriangleVAO.Unbind();
@@ -77,7 +94,7 @@ void App::Run()
 
 		defaultShader.Use();
 		TriangleVAO.Bind();
-		glDrawArrays(GL_TRIANGLES, 0, 3);
+		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();

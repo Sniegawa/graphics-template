@@ -5,11 +5,6 @@
 
 #include <glm/glm.hpp>
 
-
-#include "OpenGLObjects/VAO.h"
-#include "OpenGLObjects/VBO.h"
-#include "OpenGLObjects/Shader.h"
-
 class App
 {
 public:
