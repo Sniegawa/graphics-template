@@ -11,7 +11,7 @@ add_executable(templateApp
 	"OpenGLObjects/VBO.h" 
 	"OpenGLObjects/VBO.cpp" 
 	"OpenGLObjects/Shader.h" 
-	"OpenGLObjects/Shader.cpp" "OpenGLObjects/EBO.h" "OpenGLObjects/EBO.cpp")
+	"OpenGLObjects/Shader.cpp" "OpenGLObjects/EBO.h" "OpenGLObjects/EBO.cpp" "OpenGLObjects/Texture2D.cpp")
 
 
 target_link_libraries(templateApp PUBLIC
@@ -32,4 +32,11 @@ add_custom_command(TARGET templateApp POST_BUILD
         "${CMAKE_CURRENT_SOURCE_DIR}/Shaders"
         "${CMAKE_CURRENT_BINARY_DIR}/Shaders"
 )
+
+add_custom_command(TARGET templateApp POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+        "${CMAKE_CURRENT_SOURCE_DIR}/Textures"
+        "${CMAKE_CURRENT_BINARY_DIR}/Textures"
+)
+
 endif()

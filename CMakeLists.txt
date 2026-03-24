@@ -9,7 +9,7 @@ add_subdirectory(libs/GLAD)
 add_subdirectory(libs/glfw)
 
 include_directories(libs/glm)
-
+include_directories(libs/stb)
 
 add_subdirectory(Source/)
 

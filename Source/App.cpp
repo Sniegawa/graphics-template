@@ -9,6 +9,8 @@
 #include "OpenGLObjects/VBO.h"
 #include "OpenGLObjects/EBO.h"
 #include "OpenGLObjects/Shader.h"
+#include "OpenGLObjects/Texture2D.h"
+
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -81,10 +83,18 @@ void App::Run()
 
 	TriangleVAO.linkAttrib(0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
 	TriangleVAO.linkAttrib(1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	TriangleVAO.linkAttrib(2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(5 * sizeof(float)));
+	TriangleVAO.linkAttrib(2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
 
 	TriangleVBO.Unbind();
 	TriangleVAO.Unbind();
+
+	Texture2D brick = Texture2D("Textures/wall.jpg");
+	Texture2D face = Texture2D("Textures/awesomeface.png");
+
+	defaultShader.Use();
+
+	defaultShader.setInt("texture1", 0);
+	defaultShader.setInt("texture2", 1);
 
 
 	while (!glfwWindowShouldClose(m_Window))
@@ -94,8 +104,11 @@ void App::Run()
 
 		defaultShader.Use();
 		TriangleVAO.Bind();
+		brick.Bind(0);
+		face.Bind(1);
 		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+		brick.Unbind();
+		face.Unbind();
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
 	}
