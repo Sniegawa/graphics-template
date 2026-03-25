@@ -49,22 +49,22 @@ void Shader::setFloat(const std::string& name, float v) const
 	glUniform1f(loc(name), v);
 }
 
-void Shader::setVector2(const std::string& name, glm::vec2& v) const
+void Shader::setVector2(const std::string& name, const glm::vec2& v) const
 {
 	glUniform2fv(loc(name), 1, glm::value_ptr(v));
 }
 
-void Shader::setVector3(const std::string& name, glm::vec3& v) const
+void Shader::setVector3(const std::string& name, const glm::vec3& v) const
 {
 	glUniform3fv(loc(name), 1, glm::value_ptr(v));
 }
 
-void Shader::setVector4(const std::string& name, glm::vec4& v) const
+void Shader::setVector4(const std::string& name, const glm::vec4& v) const
 {
 	glUniform4fv(loc(name), 1, glm::value_ptr(v));
 }
 
-void Shader::setMat4x4(const std::string& name, glm::mat4& v) const
+void Shader::setMat4x4(const std::string& name, const glm::mat4& v) const
 {
 	glUniformMatrix4fv(loc(name), 1, GL_FALSE, glm::value_ptr(v));
 }

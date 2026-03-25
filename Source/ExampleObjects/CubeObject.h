@@ -22,6 +22,7 @@ public:
 
 	void SetPosition(const glm::vec3& pos);
 	void SetRotation(const glm::vec3& rot);
+	void Rotate(const glm::vec3& rot);
 	void SetScale(const glm::vec3& scale);
 	void SetTexture(std::shared_ptr<Texture2D>& texture);
 	void SetShader(std::shared_ptr<Shader>& shader);

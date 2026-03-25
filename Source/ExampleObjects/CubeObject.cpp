@@ -88,7 +88,9 @@ void CubeObject::Draw()
 	
 	m_vao.Bind();
 
-	glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
+	const int indexes = 36;
+
+	glDrawElements(GL_TRIANGLES, indexes, GL_UNSIGNED_INT, 0);
 
 	m_Texture->Unbind();
 	m_vao.Unbind();
@@ -103,6 +105,12 @@ void CubeObject::SetPosition(const glm::vec3& pos)
 void CubeObject::SetRotation(const glm::vec3& rot)
 {
 	m_Rotation = rot;
+	RecalculateModelMatrix();
+}
+
+void CubeObject::Rotate(const glm::vec3& rot)
+{
+	m_Rotation += rot;
 	RecalculateModelMatrix();
 }
 
