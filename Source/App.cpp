@@ -10,7 +10,7 @@
 #include "OpenGLObjects/EBO.h"
 #include "OpenGLObjects/Shader.h"
 #include "OpenGLObjects/Texture2D.h"
-
+#include "ExampleObjects/CubeObject.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 
@@ -66,49 +66,30 @@ void App::Run()
 		0, 1, 3,   
 		1, 2, 3   
 	};
+	
 
-	Shader defaultShader("Shaders/simple.vert", "Shaders/simple.frag");
+	std::shared_ptr<Shader> CubeShader = std::make_shared<Shader>("Shaders/cube.vert", "Shaders/cube.frag");
+	std::shared_ptr<Texture2D> CubeTexture = std::make_shared<Texture2D>("Textures/wall.jpg");
 
-	VAO TriangleVAO;
-	TriangleVAO.Bind();
+	CubeObject cube;
 
-	VBO TriangleVBO;
-	TriangleVBO.Bind();
+	cube.SetShader(CubeShader);
+	cube.SetTexture(CubeTexture);
 
-	EBO TriangleEBO;
-	TriangleEBO.Bind();
+	cube.SetPosition(glm::vec3(0.0f, 0.0f, 0.0f));
 
-	TriangleVBO.SetData(vertices, sizeof(vertices), GL_STATIC_DRAW);
-	TriangleEBO.SetData(indices, sizeof(indices), GL_STATIC_DRAW);
-
-	TriangleVAO.linkAttrib(0, 3, GL_FLOAT, 8 * sizeof(float), (void*)0);
-	TriangleVAO.linkAttrib(1, 3, GL_FLOAT, 8 * sizeof(float), (void*)(3 * sizeof(float)));
-	TriangleVAO.linkAttrib(2, 2, GL_FLOAT, 8 * sizeof(float), (void*)(6 * sizeof(float)));
-
-	TriangleVBO.Unbind();
-	TriangleVAO.Unbind();
-
-	Texture2D brick = Texture2D("Textures/wall.jpg");
-	Texture2D face = Texture2D("Textures/awesomeface.png");
-
-	defaultShader.Use();
-
-	defaultShader.setInt("texture1", 0);
-	defaultShader.setInt("texture2", 1);
-
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_CULL_FACE);
+	glCullFace(GL_BACK);
+	glFrontFace(GL_CW);
 
 	while (!glfwWindowShouldClose(m_Window))
 	{
 		glClearColor(0.0f, 0.0f, 0.2f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		cube.SetRotation({ (float)glfwGetTime() * - 5.0f, (float)glfwGetTime()*50, (float)glfwGetTime() * 15.0f });
+		cube.Draw();
 
-		defaultShader.Use();
-		TriangleVAO.Bind();
-		brick.Bind(0);
-		face.Bind(1);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-		brick.Unbind();
-		face.Unbind();
 		glfwSwapBuffers(m_Window);
 		glfwPollEvents();
 	}
